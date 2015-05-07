@@ -1,6 +1,8 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from contact.models import Contact
+
 
 class ContactViewTest(TestCase):
     def test_contact_page_should_be_accessible(self):
@@ -32,3 +34,18 @@ class ContactViewTest(TestCase):
 
         expected = '<input type="submit" value="Submit">'
         self.assertContains(response, expected, status_code=200)
+
+    def test_submit_form_should_have_data_in_database(self):
+        self.assertEqual(Contact.objects.all().count(),0)
+
+        data = {
+            'first_name': 'Navarat',
+            'last_name': 'Pramuksun'
+        }
+        self.client.post(reverse('contact'),data=data)
+
+        contact = Contact.objects.get(first_name='Navarat')
+        self.assertEqual(contact.first_name, 'Navarat')
+        self.assertEqual(contact.last_name, 'Pramuksun')
+
+        self.assertEqual(Contact.objects.all().count(),1)
