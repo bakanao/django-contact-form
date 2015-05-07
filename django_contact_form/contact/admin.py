@@ -3,4 +3,8 @@ from django.contrib import admin
 from contact.models import Contact
 
 
-admin.site.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name',)
+
+
+admin.site.register(Contact, ContactAdmin)
