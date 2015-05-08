@@ -87,3 +87,17 @@ class ContactViewTest(TestCase):
 
         expected = 'This field is required.'
         self.assertContains(response, expected, status_code=200)
+
+    def test_submit_without_any_data_should_show_two_error_messages(self):
+        self.assertEqual(Contact.objects.all().count(), 0)
+
+        data = {
+            'first_name': '',
+            'last_name': ''
+        }
+        response = self.client.post(reverse('contact'),data=data)
+
+        self.assertEqual(Contact.objects.all().count(), 0)
+
+        expected = 'This field is required.'
+        self.assertContains(response, expected, count=2, status_code=200)
