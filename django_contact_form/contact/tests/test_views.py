@@ -38,7 +38,7 @@ class ContactViewTest(TestCase):
         self.assertContains(response, expected, status_code=200)
 
     def test_submit_form_should_have_data_in_database(self):
-        self.assertEqual(Contact.objects.all().count(),0)
+        self.assertEqual(Contact.objects.all().count(), 0)
 
         data = {
             'first_name': 'Navarat',
@@ -50,7 +50,7 @@ class ContactViewTest(TestCase):
         self.assertEqual(contact.first_name, 'Navarat')
         self.assertEqual(contact.last_name, 'Pramuksun')
 
-        self.assertEqual(Contact.objects.all().count(),1)
+        self.assertEqual(Contact.objects.all().count(), 1)
 
         expected = '<td><input id="id_first_name" maxlength="100" '
         expected +='name="first_name" type="text" value="Navarat" /></td>'
@@ -60,3 +60,16 @@ class ContactViewTest(TestCase):
         expected += 'name="last_name" type="text" value="Pramuksun" /></td>'
         self.assertContains(response, expected, status_code=200)
 
+    def test_submit_without_first_name_should_show_error_message(self):
+        self.assertEqual(Contact.objects.all().count(), 0)
+
+        data = {
+            'first_name': '',
+            'last_name': 'Pramuksun'
+        }
+        response = self.client.post(reverse('contact'),data=data)
+
+        self.assertEqual(Contact.objects.all().count(), 0)
+
+        expected = 'This field is required.'
+        self.assertContains(response, expected, status_code=200)
