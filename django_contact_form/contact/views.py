@@ -18,11 +18,12 @@ class ContactView(TemplateView):
         )
 
     def post(self, request):
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        Contact.objects.create(
-            first_name=first_name,
-            last_name=last_name
-        )
+        form =ContactForm(data=request.POST)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            Contact.objects.create(
+                first_name=cleaned_data['first_name'],
+                last_name=cleaned_data['last_name']
+            )
 
         return render(request, self.template_name, {})
