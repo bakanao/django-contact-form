@@ -44,10 +44,19 @@ class ContactViewTest(TestCase):
             'first_name': 'Navarat',
             'last_name': 'Pramuksun'
         }
-        self.client.post(reverse('contact'),data=data)
+        response = self.client.post(reverse('contact'),data=data)
 
         contact = Contact.objects.get(first_name='Navarat')
         self.assertEqual(contact.first_name, 'Navarat')
         self.assertEqual(contact.last_name, 'Pramuksun')
 
         self.assertEqual(Contact.objects.all().count(),1)
+
+        expected = '<td><input id="id_first_name" maxlength="100" '
+        expected +='name="first_name" type="text" value="Navarat" /></td>'
+        self.assertContains(response, expected, status_code=200)
+
+        expected = '<td><input id="id_last_name" maxlength="100" '
+        expected += 'name="last_name" type="text" value="Pramuksun" /></td>'
+        self.assertContains(response, expected, status_code=200)
+

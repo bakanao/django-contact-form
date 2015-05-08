@@ -26,4 +26,10 @@ class ContactView(TemplateView):
                 last_name=cleaned_data['last_name']
             )
 
-        return render(request, self.template_name, {})
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': form
+            }
+        )
