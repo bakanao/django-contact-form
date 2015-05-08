@@ -2,13 +2,20 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from contact.models import Contact
-
+from contact.forms import ContactForm
 
 class ContactView(TemplateView):
     template_name='contact.html'
 
     def get(self, request):
-        return render(request, self.template_name, {})
+        form = ContactForm()
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': form
+            }
+        )
 
     def post(self, request):
         first_name = request.POST.get('first_name')

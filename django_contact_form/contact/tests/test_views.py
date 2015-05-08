@@ -23,13 +23,15 @@ class ContactViewTest(TestCase):
         expected = '<td>first name:</td>'
         self.assertContains(response, expected, status_code=200)
 
-        expected = '<td><input type="text" name="first_name"></td>'
+        expected = '<td><input id="id_first_name" maxlength="100" '
+        expected += 'name="first_name" type="text" /></td>'
         self.assertContains(response, expected, status_code=200)
 
         expected = '<td>last name:</td>'
         self.assertContains(response, expected, status_code=200)
 
-        expected = '<td><input type="text" name="last_name"></td>'
+        expected = '<td><input id="id_last_name" maxlength="100" '
+        expected += 'name="last_name" type="text" /></td>'
         self.assertContains(response, expected, status_code=200)
 
         expected = '<input type="submit" value="Submit">'
