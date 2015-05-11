@@ -104,11 +104,23 @@ class ContactViewTest(TestCase):
 
 
 class ThankYouViewTest(TestCase):
+    def setUp(self):
+        Contact.objects.create(
+            first_name='lnwBoss',
+            last_name='yong'
+        )
+        self.response = self.client.get(reverse('thank'))
+
     def test_thank_you_page_should_be_accessible(self):
-        response = self.client.get(reverse('thank'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.response.status_code, 200)
 
     def test_thank_you_page_should_display_title_thank_you(self):
-        response = self.client.get(reverse('thank'))
         expected = '<h1>Thank you!</h1>'
-        self.assertContains(response, expected, status_code=200)
+        self.assertContains(self.response, expected, status_code=200)
+
+    def test_thank_you_page_should_display_latest_first_and_last_name(self):
+        expected = 'First name: lnwBoss'
+        self.assertContains(self.response, expected, status_code=200)
+
+        expected = 'Last name: yong'
+        self.assertContains(self.response, expected, status_code=200)

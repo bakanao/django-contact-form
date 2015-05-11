@@ -37,3 +37,13 @@ class ContactView(TemplateView):
 
 class ThankYouView(TemplateView):
     template_name='thank.html'
+
+    def get(self, request):
+        latest_contact = Contact.objects.latest('id')
+        return render(
+            request,
+            self.template_name,
+            {
+                'latest_contact': latest_contact
+            }
+        )
