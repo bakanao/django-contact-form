@@ -6,6 +6,7 @@ end
 When(/^User fill the fields$/) do
     fill_in 'first_name', with: 'lnwBoss'
     fill_in 'last_name', with: 'yong'
+    fill_in 'email', with: 'boss@prontomarketing.com'
 end
 
 When(/^User click submit button$/) do
@@ -24,4 +25,5 @@ Then(/^User should be on thank you page$/) do
     expect(page).to have_content 'Thank you!'
     expect(page).to have_content 'First name: lnwBoss'
     expect(page).to have_content 'Last name: yong'
+    expect(page).to have_content 'Email: boss@prontomarketing.com'
 end

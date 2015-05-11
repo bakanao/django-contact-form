@@ -132,7 +132,8 @@ class ThankYouViewTest(TestCase):
     def setUp(self):
         Contact.objects.create(
             first_name='lnwBoss',
-            last_name='yong'
+            last_name='yong',
+            email ='boss@pronto.com'
         )
         self.response = self.client.get(reverse('thank'))
 
@@ -148,6 +149,9 @@ class ThankYouViewTest(TestCase):
         self.assertContains(self.response, expected, status_code=200)
 
         expected = 'Last name: yong'
+        self.assertContains(self.response, expected, status_code=200)
+
+        expected = 'Email: boss@pronto.com'
         self.assertContains(self.response, expected, status_code=200)
 
     def test_access_thank_you_page_directly_when_no_data_should_show_thank_msg(
