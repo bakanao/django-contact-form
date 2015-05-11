@@ -34,3 +34,15 @@ class ContactAdminTest(TestCase):
 
         expected = '<div class="text"><a href="?o=3">Email</a></div>'
         self.assertContains(response, expected, status_code=200)
+
+    def test_contact_admin_should_have_search_box_by_email(self):
+        Contact.objects.create(
+            first_name='Navarat',
+            last_name='P',
+            email='oy@prontomarketing.com'
+        )
+
+        response = self.client.get('/admin/contact/contact/?q=pronto')
+
+        expected = 'Navarat'
+        self.assertContains(response, expected, status_code=200)
