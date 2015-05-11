@@ -25,7 +25,8 @@ class ContactView(TemplateView):
             cleaned_data = form.cleaned_data
             Contact.objects.create(
                 first_name=cleaned_data['first_name'],
-                last_name=cleaned_data['last_name']
+                last_name=cleaned_data['last_name'],
+                email=cleaned_data['email']
             )
 
             return HttpResponseRedirect(reverse('thank'))

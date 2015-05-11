@@ -42,13 +42,15 @@ class ContactViewTest(TestCase):
 
         data = {
             'first_name': 'Navarat',
-            'last_name': 'Pramuksun'
+            'last_name': 'Pramuksun',
+            'email': 'oy@prontomarketing.com'
         }
         response = self.client.post(reverse('contact'), data=data, follow=True)
 
         contact = Contact.objects.get(first_name='Navarat')
         self.assertEqual(contact.first_name, 'Navarat')
         self.assertEqual(contact.last_name, 'Pramuksun')
+        self.assertEqual(contact.email, 'oy@prontomarketing.com')
 
         self.assertEqual(Contact.objects.all().count(), 1)
 
@@ -60,7 +62,6 @@ class ContactViewTest(TestCase):
 
         expected = 'Last name: Pramuksun'
         self.assertContains(response, expected, status_code=200)
-
 
     def test_submit_without_first_name_should_show_error_message(self):
         self.assertEqual(Contact.objects.all().count(), 0)
@@ -107,7 +108,8 @@ class ContactViewTest(TestCase):
     def test_submit_form_successfully_should_redirect_to_thank_you_page(self):
         data = {
             'first_name': 'Navarat',
-            'last_name': 'Pramuksun'
+            'last_name': 'Pramuksun',
+            'email': 'oy@prontomarketing.com'
         }
         response = self.client.post(reverse('contact'), data=data)
 
