@@ -101,3 +101,9 @@ class ContactViewTest(TestCase):
 
         expected = 'This field is required.'
         self.assertContains(response, expected, count=2, status_code=200)
+
+
+class ThankYouViewTest(TestCase):
+    def test_thank_you_page_should_be_accessible(self):
+        response = self.client.get(reverse('thank'))
+        self.assertEqual(response.status_code, 200)

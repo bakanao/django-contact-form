@@ -33,3 +33,7 @@ class ContactView(TemplateView):
                 'form': form
             }
         )
+
+
+class ThankYouView(TemplateView):
+    template_name='thank.html'
