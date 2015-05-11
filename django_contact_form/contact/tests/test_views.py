@@ -34,6 +34,12 @@ class ContactViewTest(TestCase):
         expected += 'name="last_name" type="text" /></td>'
         self.assertContains(response, expected, status_code=200)
 
+        expected = '<td>email:</td>'
+        self.assertContains(response, expected, status_code=200)
+
+        expected = '<td><input id="id_email" name="email" type="email" /></td>'
+        self.assertContains(response, expected, status_code=200)
+
         expected = '<input type="submit" value="Submit">'
         self.assertContains(response, expected, status_code=200)
 
@@ -96,14 +102,15 @@ class ContactViewTest(TestCase):
 
         data = {
             'first_name': '',
-            'last_name': ''
+            'last_name': '',
+            'email': ''
         }
         response = self.client.post(reverse('contact'), data=data)
 
         self.assertEqual(Contact.objects.all().count(), 0)
 
         expected = 'This field is required.'
-        self.assertContains(response, expected, count=2, status_code=200)
+        self.assertContains(response, expected, count=3, status_code=200)
 
     def test_submit_form_successfully_should_redirect_to_thank_you_page(self):
         data = {
