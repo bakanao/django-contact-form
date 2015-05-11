@@ -19,3 +19,9 @@ end
 Then(/^User get error message$/) do
     expect(page).to have_content 'This field is required'
 end
+
+Then(/^User should be on thank you page$/) do
+    expect(page).to have_content 'Thank you!'
+    expect(page).to have_content 'First name: lnwBoss'
+    expect(page).to have_content 'Last name: yong'
+end

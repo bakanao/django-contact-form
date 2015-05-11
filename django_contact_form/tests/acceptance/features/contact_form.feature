@@ -4,6 +4,7 @@ Feature: contact form
          When User fill the fields
           And User click submit button
          Then User submit form succussfully
+          And User should be on thank you page
 
     Scenario: User for get to fill required fileds
         Given User is on contact form page
