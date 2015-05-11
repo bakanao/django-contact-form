@@ -140,3 +140,12 @@ class ThankYouViewTest(TestCase):
 
         expected = 'Last name: yong'
         self.assertContains(self.response, expected, status_code=200)
+
+    def test_access_thank_you_page_directly_when_no_data_should_show_thank_msg(
+        self
+    ):
+        Contact.objects.all().delete()
+        response =  self.client.get(reverse('thank'))
+
+        expected = '<h1>Thank you!</h1>'
+        self.assertContains(response, expected, status_code=200)
