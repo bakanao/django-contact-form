@@ -20,7 +20,8 @@ class ContactAdminTest(TestCase):
     def test_contact_admin_should_display_first_name_and_last_name(self):
         Contact.objects.create(
             first_name='N',
-            last_name='P'
+            last_name='P',
+            email='oy@prontomarketing.com'
         )
 
         response = self.client.get('/admin/contact/contact/')
@@ -29,4 +30,7 @@ class ContactAdminTest(TestCase):
         self.assertContains(response, expected, status_code=200)
 
         expected = '<div class="text"><a href="?o=2">Last name</a></div>'
+        self.assertContains(response, expected, status_code=200)
+
+        expected = '<div class="text"><a href="?o=3">Email</a></div>'
         self.assertContains(response, expected, status_code=200)
