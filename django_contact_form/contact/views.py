@@ -1,3 +1,5 @@
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -25,6 +27,8 @@ class ContactView(TemplateView):
                 first_name=cleaned_data['first_name'],
                 last_name=cleaned_data['last_name']
             )
+
+            return HttpResponseRedirect(reverse('thank'))
 
         return render(
             request,

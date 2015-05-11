@@ -44,7 +44,7 @@ class ContactViewTest(TestCase):
             'first_name': 'Navarat',
             'last_name': 'Pramuksun'
         }
-        response = self.client.post(reverse('contact'),data=data)
+        response = self.client.post(reverse('contact'), data=data, follow=True)
 
         contact = Contact.objects.get(first_name='Navarat')
         self.assertEqual(contact.first_name, 'Navarat')
@@ -52,13 +52,15 @@ class ContactViewTest(TestCase):
 
         self.assertEqual(Contact.objects.all().count(), 1)
 
-        expected = '<td><input id="id_first_name" maxlength="100" '
-        expected +='name="first_name" type="text" value="Navarat" /></td>'
+        expected = 'Thank you!'
         self.assertContains(response, expected, status_code=200)
 
-        expected = '<td><input id="id_last_name" maxlength="100" '
-        expected += 'name="last_name" type="text" value="Pramuksun" /></td>'
+        expected = 'First name: Navarat'
         self.assertContains(response, expected, status_code=200)
+
+        expected = 'Last name: Pramuksun'
+        self.assertContains(response, expected, status_code=200)
+
 
     def test_submit_without_first_name_should_show_error_message(self):
         self.assertEqual(Contact.objects.all().count(), 0)
@@ -67,7 +69,7 @@ class ContactViewTest(TestCase):
             'first_name': '',
             'last_name': 'Pramuksun'
         }
-        response = self.client.post(reverse('contact'),data=data)
+        response = self.client.post(reverse('contact'), data=data)
 
         self.assertEqual(Contact.objects.all().count(), 0)
 
@@ -81,7 +83,7 @@ class ContactViewTest(TestCase):
             'first_name': 'Navarat',
             'last_name': ''
         }
-        response = self.client.post(reverse('contact'),data=data)
+        response = self.client.post(reverse('contact'), data=data)
 
         self.assertEqual(Contact.objects.all().count(), 0)
 
@@ -95,12 +97,26 @@ class ContactViewTest(TestCase):
             'first_name': '',
             'last_name': ''
         }
-        response = self.client.post(reverse('contact'),data=data)
+        response = self.client.post(reverse('contact'), data=data)
 
         self.assertEqual(Contact.objects.all().count(), 0)
 
         expected = 'This field is required.'
         self.assertContains(response, expected, count=2, status_code=200)
+
+    def test_submit_form_successfully_should_redirect_to_thank_you_page(self):
+        data = {
+            'first_name': 'Navarat',
+            'last_name': 'Pramuksun'
+        }
+        response = self.client.post(reverse('contact'), data=data)
+
+        self.assertRedirects(
+            response,
+            reverse('thank'),
+            status_code=302,
+            target_status_code=200
+        )
 
 
 class ThankYouViewTest(TestCase):
