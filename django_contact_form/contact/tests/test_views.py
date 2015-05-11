@@ -107,3 +107,8 @@ class ThankYouViewTest(TestCase):
     def test_thank_you_page_should_be_accessible(self):
         response = self.client.get(reverse('thank'))
         self.assertEqual(response.status_code, 200)
+
+    def test_thank_you_page_should_display_title_thank_you(self):
+        response = self.client.get(reverse('thank'))
+        expected = '<h1>Thank you!</h1>'
+        self.assertContains(response, expected, status_code=200)
