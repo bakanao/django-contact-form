@@ -1,3 +1,5 @@
+from mock import patch
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -43,7 +45,8 @@ class ContactViewTest(TestCase):
         expected = '<input type="submit" value="Submit">'
         self.assertContains(response, expected, status_code=200)
 
-    def test_submit_form_should_have_data_in_database(self):
+    @patch('contact.views.Geoip')
+    def test_submit_form_should_have_data_in_database(self, mock):
         self.assertEqual(Contact.objects.all().count(), 0)
 
         data = {
@@ -112,7 +115,11 @@ class ContactViewTest(TestCase):
         expected = 'This field is required.'
         self.assertContains(response, expected, count=3, status_code=200)
 
-    def test_submit_form_successfully_should_redirect_to_thank_you_page(self):
+    @patch('contact.views.Geoip')
+    def test_submit_form_successfully_should_redirect_to_thank_you_page(
+        self,
+        mock
+    ):
         data = {
             'first_name': 'Navarat',
             'last_name': 'Pramuksun',
@@ -126,6 +133,52 @@ class ContactViewTest(TestCase):
             status_code=302,
             target_status_code=200
         )
+
+    @patch('contact.views.Geoip')
+    def test_submit_form_successfully_should_call_get_geoip_api(self, mock):
+        data = {
+            'first_name': 'Navarat',
+            'last_name': 'Pramuksun',
+            'email': 'oy@prontomarketing.com'
+        }
+        response = self.client.post(reverse('contact'), data=data)
+        mock.return_value.get.assert_called_once_with()
+
+    @patch('contact.views.Geoip')
+    def test_submit_form_successfully_should_save_ip_and_location_in_db(
+        self,
+        mock
+    ):
+        mock.return_value.get.return_value = {
+            u'city': u'Bangkok',
+            u'region_code': u'40',
+            u'dma_code': u'0',
+            u'ip': u'58.137.162.34',
+            u'region': u'Krung Thep',
+            u'isp': u'CS LOXINFO PUBLIC COMPANY LIMITED',
+            u'area_code': u'0',
+            u'longitude': 100.5014,
+            u'country_code3': u'THA',
+            u'continent_code': u'AS',
+            u'country_code': u'TH',
+            u'offset': u'7',
+            u'latitude': 13.754,
+            u'timezone': u'Asia/Bangkok',
+            u'country': u'Thailand',
+            u'asn': u'AS4750'
+        }
+
+        data = {
+            'first_name': 'Navarat',
+            'last_name': 'Pramuksun',
+            'email': 'oy@prontomarketing.com'
+        }
+
+        response = self.client.post(reverse('contact'), data=data)
+
+        contact = Contact.objects.latest('id')
+        self.assertEqual(contact.ip, '58.137.162.34')
+        self.assertEqual(contact.location, '13.754:100.5014')
 
 
 class ThankYouViewTest(TestCase):

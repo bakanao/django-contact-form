@@ -5,6 +5,8 @@ from django.views.generic import TemplateView
 
 from contact.models import Contact
 from contact.forms import ContactForm
+from telize.api.geoip import Geoip
+
 
 class ContactView(TemplateView):
     template_name='contact.html'
@@ -22,11 +24,16 @@ class ContactView(TemplateView):
     def post(self, request):
         form =ContactForm(data=request.POST)
         if form.is_valid():
+            geoip = Geoip()
+            response = geoip.get()
+            location='%s:%s' % (response['latitude'], response['longitude'])
             cleaned_data = form.cleaned_data
             Contact.objects.create(
                 first_name=cleaned_data['first_name'],
                 last_name=cleaned_data['last_name'],
-                email=cleaned_data['email']
+                email=cleaned_data['email'],
+                ip=response['ip'],
+                location=location
             )
 
             return HttpResponseRedirect(reverse('thank'))
