@@ -186,7 +186,9 @@ class ThankYouViewTest(TestCase):
         Contact.objects.create(
             first_name='lnwBoss',
             last_name='yong',
-            email ='boss@pronto.com'
+            email='boss@pronto.com',
+            ip='58.137.162.34',
+            location='13.754:100.5014'
         )
         self.response = self.client.get(reverse('thank'))
 
@@ -205,6 +207,12 @@ class ThankYouViewTest(TestCase):
         self.assertContains(self.response, expected, status_code=200)
 
         expected = 'Email: boss@pronto.com'
+        self.assertContains(self.response, expected, status_code=200)
+
+        expected = 'IP: 58.137.162.34'
+        self.assertContains(self.response, expected, status_code=200)
+
+        expected = 'Location: 13.754:100.5014'
         self.assertContains(self.response, expected, status_code=200)
 
     def test_access_thank_you_page_directly_when_no_data_should_show_thank_msg(
