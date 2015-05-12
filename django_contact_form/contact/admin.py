@@ -4,7 +4,7 @@ from contact.models import Contact
 
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email')
+    list_display = ('first_name', 'last_name', 'email', 'ip', 'location')
     search_fields = ['email']
 
 

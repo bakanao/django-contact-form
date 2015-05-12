@@ -17,11 +17,13 @@ class ContactAdminTest(TestCase):
         response = self.client.get('/admin/contact/contact/')
         self.assertEqual(response.status_code, 200)
 
-    def test_contact_admin_should_display_first_name_and_last_name(self):
+    def test_contact_admin_should_display_all_fields_in_columns(self):
         Contact.objects.create(
             first_name='N',
             last_name='P',
-            email='oy@prontomarketing.com'
+            email='oy@prontomarketing.com',
+            ip='58.137.162.34',
+            location='13.754:100.5014'
         )
 
         response = self.client.get('/admin/contact/contact/')
@@ -33,6 +35,12 @@ class ContactAdminTest(TestCase):
         self.assertContains(response, expected, status_code=200)
 
         expected = '<div class="text"><a href="?o=3">Email</a></div>'
+        self.assertContains(response, expected, status_code=200)
+
+        expected = '<div class="text"><a href="?o=4">Ip</a></div>'
+        self.assertContains(response, expected, status_code=200)
+
+        expected = '<div class="text"><a href="?o=5">Location</a></div>'
         self.assertContains(response, expected, status_code=200)
 
     def test_contact_admin_should_have_search_box_by_email(self):
