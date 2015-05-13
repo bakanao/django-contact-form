@@ -196,6 +196,7 @@ DJANGO_APPS = (
 LOCAL_APPS = (
     'contact',
     'telize',
+    'comments',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

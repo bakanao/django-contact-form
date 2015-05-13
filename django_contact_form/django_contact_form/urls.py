@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.views.generic import TemplateView
 from contact import views as contact_views
+from comments import views as comments_views
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -12,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='base.html')),
     url(r'^contact/$', contact_views.ContactView.as_view(), name='contact'),
     url(r'^thank/$', contact_views.ThankYouView.as_view(), name='thank'),
+    url(r'^comments/$', comments_views.CommentsView.as_view(), name='comments'),
 
     # Examples:
     # url(r'^$', 'django_contact_form.views.home', name='home'),
