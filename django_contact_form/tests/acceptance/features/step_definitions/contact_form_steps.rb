@@ -26,4 +26,7 @@ Then(/^User should be on thank you page$/) do
     expect(page).to have_content 'First name: lnwBoss'
     expect(page).to have_content 'Last name: yong'
     expect(page).to have_content 'Email: boss@prontomarketing.com'
+    expect(page).to have_content 'IP:'
+    expect(page).to have_content 'Lat:'
+    expect(page).to have_content 'Lng:'
 end

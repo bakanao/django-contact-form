@@ -145,7 +145,7 @@ class ContactViewTest(TestCase):
         mock.return_value.get.assert_called_once_with()
 
     @patch('contact.views.Geoip')
-    def test_submit_form_successfully_should_save_ip_and_location_in_db(
+    def test_submit_form_successfully_should_save_ip_lat_and_long_in_db(
         self,
         mock
     ):
@@ -178,7 +178,8 @@ class ContactViewTest(TestCase):
 
         contact = Contact.objects.latest('id')
         self.assertEqual(contact.ip, '58.137.162.34')
-        self.assertEqual(contact.location, '13.754:100.5014')
+        self.assertEqual(contact.lat, '13.754')
+        self.assertEqual(contact.lng, '100.5014')
 
 
 class ThankYouViewTest(TestCase):
@@ -188,7 +189,8 @@ class ThankYouViewTest(TestCase):
             last_name='yong',
             email='boss@pronto.com',
             ip='58.137.162.34',
-            location='13.754:100.5014'
+            lat='13.754',
+            lng='100.5014'
         )
         self.response = self.client.get(reverse('thank'))
 
@@ -199,7 +201,7 @@ class ThankYouViewTest(TestCase):
         expected = '<h1>Thank you!</h1>'
         self.assertContains(self.response, expected, status_code=200)
 
-    def test_thank_you_page_should_display_latest_first_and_last_name(self):
+    def test_thank_you_page_should_display_latest_contact_information(self):
         expected = 'First name: lnwBoss'
         self.assertContains(self.response, expected, status_code=200)
 
@@ -212,7 +214,10 @@ class ThankYouViewTest(TestCase):
         expected = 'IP: 58.137.162.34'
         self.assertContains(self.response, expected, status_code=200)
 
-        expected = 'Location: 13.754:100.5014'
+        expected = 'Lat: 13.754'
+        self.assertContains(self.response, expected, status_code=200)
+
+        expected = 'Lng: 100.5014'
         self.assertContains(self.response, expected, status_code=200)
 
     def test_access_thank_you_page_directly_when_no_data_should_show_thank_msg(

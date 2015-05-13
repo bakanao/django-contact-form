@@ -26,14 +26,14 @@ class ContactView(TemplateView):
         if form.is_valid():
             geoip = Geoip()
             response = geoip.get()
-            location='%s:%s' % (response['latitude'], response['longitude'])
             cleaned_data = form.cleaned_data
             Contact.objects.create(
                 first_name=cleaned_data['first_name'],
                 last_name=cleaned_data['last_name'],
                 email=cleaned_data['email'],
                 ip=response['ip'],
-                location=location
+                lat=response['latitude'],
+                lng=response['longitude']
             )
 
             return HttpResponseRedirect(reverse('thank'))

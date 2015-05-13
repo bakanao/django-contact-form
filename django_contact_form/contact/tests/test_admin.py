@@ -23,7 +23,8 @@ class ContactAdminTest(TestCase):
             last_name='P',
             email='oy@prontomarketing.com',
             ip='58.137.162.34',
-            location='13.754:100.5014'
+            lat = '13.754',
+            lng = '100.5014'
         )
 
         response = self.client.get('/admin/contact/contact/')
@@ -40,7 +41,10 @@ class ContactAdminTest(TestCase):
         expected = '<div class="text"><a href="?o=4">Ip</a></div>'
         self.assertContains(response, expected, status_code=200)
 
-        expected = '<div class="text"><a href="?o=5">Location</a></div>'
+        expected = '<div class="text"><a href="?o=5">Lat</a></div>'
+        self.assertContains(response, expected, status_code=200)
+
+        expected = '<div class="text"><a href="?o=6">Lng</a></div>'
         self.assertContains(response, expected, status_code=200)
 
     def test_contact_admin_should_have_search_box_by_email(self):
