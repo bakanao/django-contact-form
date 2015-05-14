@@ -9,6 +9,7 @@ class CommentsModelTest(TestCase):
         comments = Comments()
         comments.name = 'oy'
         comments.comment = 'hello!'
+        comments.ip = '58.137.162.34'
 
         self.assertFalse(comments.id)
 
@@ -24,10 +25,14 @@ class CommentsModelTest(TestCase):
         expected = 'hello!'
         self.assertEqual(comments_new.comment, expected)
 
+        expected = '58.137.162.34'
+        self.assertEqual(comments_new.ip, expected)
+
     def test_submit_comment_without_name_should_fail(self):
         comments = Comments()
         comments.name = None
         comments.comment = 'hello!'
+        comments.ip = '58.137.162.34'
 
         self.assertRaises(IntegrityError, comments.save)
 
@@ -35,5 +40,14 @@ class CommentsModelTest(TestCase):
         comments = Comments()
         comments.name = 'oy'
         comments.comment = None
+        comments.ip = '58.137.162.34'
+
+        self.assertRaises(IntegrityError, comments.save)
+
+    def test_submit_comment_without_ip_should_fail(self):
+        comments = Comments()
+        comments.name = 'oy'
+        comments.comment = 'hello!'
+        comments.ip = None
 
         self.assertRaises(IntegrityError, comments.save)
