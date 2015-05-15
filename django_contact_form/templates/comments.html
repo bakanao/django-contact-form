@@ -5,10 +5,12 @@
         <tr>
             <td>name:</td>
             <td>{{ form.name }}</td>
+            <td>{{ form.name.errors }}</td>
         </tr>
         <tr>
             <td>last name:</td>
             <td>{{ form.comment }}</td>
+            <td>{{ form.comment.errors }}</td>
         </tr>
     </table>
     <input type="submit" value="Comment!">

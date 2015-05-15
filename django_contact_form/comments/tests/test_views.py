@@ -42,3 +42,33 @@ class CommentsViewTest(TestCase):
         self.assertEqual(comments.comment, 'hi')
 
         self.assertEqual(Comments.objects.all().count(), 1)
+
+    def test_submit_comments_form_without_name_should_show_error_message(self):
+        self.assertEqual(Comments.objects.all().count(), 0)
+
+        data = {
+            'name': '',
+            'comment': 'hi',
+        }
+        response = self.client.post('/comments/', data=data)
+
+        self.assertEqual(Comments.objects.all().count(), 0)
+
+        expected = 'This field is required.'
+        self.assertContains(response, expected, status_code=200)
+
+    def test_submit_comments_form_without_comment_should_show_error_message(
+        self
+    ):
+        self.assertEqual(Comments.objects.all().count(), 0)
+
+        data = {
+            'name': 'oy',
+            'comment': '',
+        }
+        response = self.client.post('/comments/', data=data)
+
+        self.assertEqual(Comments.objects.all().count(), 0)
+
+        expected = 'This field is required.'
+        self.assertContains(response, expected, status_code=200)
