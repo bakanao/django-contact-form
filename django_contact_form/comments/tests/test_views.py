@@ -27,3 +27,18 @@ class CommentsViewTest(TestCase):
 
         expected = '<input type="submit" value="Comment!">'
         self.assertContains(response, expected, status_code=200)
+
+    def test_submit_comments_form_should_save_name_and_comment_database(self):
+        self.assertEqual(Comments.objects.all().count(), 0)
+
+        data = {
+            'name': 'oy',
+            'comment': 'hi',
+        }
+        response = self.client.post('/comments/', data=data)
+
+        comments = Comments.objects.get(name='oy')
+        self.assertEqual(comments.name, 'oy')
+        self.assertEqual(comments.comment, 'hi')
+
+        self.assertEqual(Comments.objects.all().count(), 1)
