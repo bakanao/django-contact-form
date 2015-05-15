@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from comments.models import Comments
+
 
 class CommentsViewTest(TestCase):
     def test_comments_page_should_be_accessible(self):
@@ -13,13 +15,14 @@ class CommentsViewTest(TestCase):
 
     def test_comments_page_should_have_comments_form(self):
         response = self.client.get('/comments/')
+
         expected = '<form action="." method="post">'
         self.assertContains(response, expected, status_code=200)
 
-        expected = '<td><input id="name" name="name" type="text" /></td>'
+        expected = '<td><input id="id_name" maxlength="100" name="name" type="text" /></td>'
         self.assertContains(response, expected, status_code=200)
 
-        expected = '<td><textarea id="comment" name="comment"></textarea></td>'
+        expected = '<td><textarea cols="40" id="id_comment" name="comment" rows="10">'
         self.assertContains(response, expected, status_code=200)
 
         expected = '<input type="submit" value="Comment!">'
